@@ -9,7 +9,7 @@ punctuation_map = lambda A, B: dict((ord(char), B) for char in A)
 class Normalizer():
     def __init__(self):
         self.translations = maketrans(
-            u'۱۲٣۴۵۶۷۸۹۰٤٥٦₀₁₂₃₄₅₆₇₈₉¹²⁰⁴⁵⁶⁷⁸⁹①②③④⑤⑥⑦⑧⑨⑴⑵⑶⑷⑸⑹⑺⑻⑼⒈⒉⒊⒋⒌⒍⒎⒏⒐٪؛،كيؤئإأآةك',
+            u'١٢٣٤٥٦٧٨٩٠    ۱۲٣۴۵۶۷۸۹۰٤٥٦₀₁₂₃₄₅₆₇₈₉¹²⁰⁴⁵⁶⁷⁸⁹①②③④⑤⑥⑦⑧⑨⑴⑵⑶⑷⑸⑹⑺⑻⑼⒈⒉⒊⒋⒌⒍⒎⒏⒐٪؛،كيؤئإأآةك',
             u'12345678904560123456789120456789123456789123456789123456789%;,کیویاااهک'
         )
         self.punctuations = punctuation_map(u"ـ\u200E\u200F" + unicode(string.punctuation), u" ")
@@ -91,5 +91,5 @@ class ToneProcess(object):
             cells = row.findChildren('td')
             for cell in cells:
                   value = cell.get_text(strip=True).encode('utf8').decode('utf8')
-                  print ord(value[0]), ord(u'٣')
+                  # print ord(value[0]), ord(u'٣')
                   print "The value in this cell is %s" % normal.normalize(value)
