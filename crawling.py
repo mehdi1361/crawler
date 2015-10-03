@@ -1,6 +1,6 @@
 import requests
 import re
-
+from bs4 import BeautifulSoup
 pageumber = re.compile(r'gotoPage\(1,0,(.*)\);')
 link_re = re.compile(r'href="(.*?)"')
 
