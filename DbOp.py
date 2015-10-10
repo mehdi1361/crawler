@@ -55,11 +55,9 @@ def insertotrack(tonecode, tonename, tonesinger, toneprice, tonecredit, tonepubl
     cursor.execute(strsql)
     strsql1 = ''
     if not cursor.rowcount:
-        print 'no row'
         print tonename , toneprice
         strsql1 = '''INSERT INTO tracks(toneId,toneCode,toneName,toneSinger,tonePrice,toneCredit,tonePublisher,toneGenreGroup,toneGenre,tonePage,is_read,is_new,createdAt,updatedAt) VALUES(%s,%s,'%s','%s',%s,%s,'%s','%s','%s',%s,%s,%s, '%s','%s');''' % (toneid, tonecode, tonename.encode('utf8'), tonesinger.encode('utf8'), toneprice.encode('utf8'), tonecredit.encode('utf8'), tonepublisher.encode('utf8'), tonegenregroup.encode('utf8'), tonegenre.encode('utf8'), tonepage, 0, 1, datetime.datetime.now(), datetime.datetime.now())
     else:
-        print 'found'
         strsql1 = '''update tracks set toneCode=%s ,toneName= %s,toneSinger=%s,tonePrice=%s,toneCredit=%s,tonePublisher=%s,toneGenreGroup=%s ,toneGenre=%s,tonePage=%s,is_read =%s ,is_new = %s where toneId=%s''' % (tonecode, tonename, tonesinger, toneprice, tonecredit, tonepublisher, tonegenregroup, tonegenre, tonepage, 0, 0, toneid)
     print strsql1
     cursor1 = db.cursor()

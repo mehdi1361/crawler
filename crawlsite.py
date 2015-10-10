@@ -40,7 +40,6 @@ for i in range(1, int(AllPageNumber) + 1):
             if s is None:
                 checkcache.set(str(toneid), toncode)
                 inserttoqueue(int(i), int(toneid), int(toncode))
-            print toneid, toncode
 
     except Exception:
         print 'error'
