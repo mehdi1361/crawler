@@ -18,13 +18,14 @@ class Caching(object):
     def delete(self, key):
         self.server.delete(key)
 
+truncatequeue()
 o = FindPage()
 AllPageNumber = o.search()
 # AllPageNumber = 6
 
 r = []
 checkcache = Caching()
-# checkcache.server.flush_all()
+checkcache.server.flush_all()
 for i in range(1, int(AllPageNumber) + 1):
     try:
         t = CrawlPageByPNum(i)
@@ -37,7 +38,6 @@ for i in range(1, int(AllPageNumber) + 1):
             toncode = '%s%s' % (strtonecode[3:6], int(strtonecode[-8:]))
             s = checkcache.get(str(toneid))
             if s is None:
-                print 'in if statement'
                 checkcache.set(str(toneid), toncode)
                 inserttoqueue(int(i), int(toneid), int(toncode))
             print toneid, toncode
@@ -53,4 +53,4 @@ for i in listd:
         lstp = proc.find()
         insertotrack(i[1], lstp[1], lstp[2], lstp[3], lstp[4], lstp[5], lstp[6], lstp[7], i[0], i[2])
 
-# subprocess.call("php artsian sync:crawled && artsian sync:file")
+subprocess.call("php artsian sync:crawled && artsian sync:file")

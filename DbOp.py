@@ -2,15 +2,16 @@ __author__ = 'mousavi'
 from celery import Celery
 import MySQLdb
 import datetime
-import memcache
 
+mysql_host = "localhost"
+mysql_user = "root"
+mysql_pass = "1361522"
+mysql_db = "pishnava_crawler"
 app = Celery('tasks', broker='amqp://guest@localhost//')
-
-
 @app.task
 def inserttoqueue(page, toneid, tonecode):
     try:
-        db = MySQLdb.connect("localhost", "root", "1361522", "pishnava_crawler")
+        db = MySQLdb.connect(mysql_host, mysql_user, mysql_pass, mysql_db)
         cursor = db.cursor()
         dateCreated = str(datetime.datetime.now())
         strsql = '''INSERT INTO queues(toneId,toneCode,is_new,page,createdAt,updatedAt) VALUES(%s,%s,%s,%s,'%s','%s');''' % (
@@ -25,8 +26,7 @@ def inserttoqueue(page, toneid, tonecode):
 
 
 def removeduplicate():
-    # ;
-    db = MySQLdb.connect("localhost", "root", "1361522", "pishnava_crawler")
+    db = MySQLdb.connect(mysql_host, mysql_user, mysql_pass, mysql_db)
     cursor = db.cursor()
     dateCreated = str(datetime.datetime.now())
     strsql = '''delete queues from queues inner join tracks on tracks.toneid=queues.toneid;'''
@@ -36,7 +36,7 @@ def removeduplicate():
 
 
 def tonesid():
-    db = MySQLdb.connect("localhost", "root", "1361522", "pishnava_crawler")
+    db = MySQLdb.connect(mysql_host, mysql_user, mysql_pass, mysql_db)
     cursor = db.cursor()
     strsql = '''select toneId,tonecode,page from queues;'''
     cursor.execute(strsql)
@@ -48,7 +48,7 @@ def tonesid():
 @app.task
 def insertotrack(tonecode, tonename, tonesinger, toneprice, tonecredit, tonepublisher, tonegenregroup, tonegenre,
                  toneid, tonepage):
-    db = MySQLdb.connect("localhost", "root", "1361522", "pishnava_crawler")
+    db = MySQLdb.connect(mysql_host, mysql_user, mysql_pass, mysql_db)
     cursor = db.cursor()
     cursor.execute('set names utf8;')
     strsql = '''select id from tracks where toneId= %s;''' % toneid
@@ -67,3 +67,12 @@ def insertotrack(tonecode, tonename, tonesinger, toneprice, tonecredit, tonepubl
     cursor1.execute(strsql1)
     db.commit()
     db.close()
+def truncatequeue():
+    db = MySQLdb.connect(mysql_host, mysql_user, mysql_pass, mysql_db)
+    cursor = db.cursor()
+    cursor.execute('set names utf8;')
+    strsql = '''truncate queues;'''
+    cursor.execute(strsql)
+    db.commit()
+    db.close()
+    print "truncate queues completed"

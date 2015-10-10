@@ -2,6 +2,7 @@
 import string
 from bs4 import BeautifulSoup
 import requests
+import urllib2
 import re
 
 maketrans = lambda A, B: dict((ord(a), b) for a, b in zip(A, B))
@@ -35,13 +36,12 @@ class FindPage(object):
     def crawl(self, url, maxlevel):
         if maxlevel == 0:
             return
-        req = requests.get(url)
         result = []
-        # Check if successful
-        if req.status_code != 200:
+        response = urllib2.urlopen(url)
+        req = response.read()
+        if response.code != 200:
             return []
-
-        result += self.pageumber.findall(req.text)
+        result += self.pageumber.findall(req)
         return result
 
     def search(self):
@@ -62,13 +62,15 @@ class CrawlPageByPNum(object):
     def crawl(self, url, maxlevel):
         if maxlevel == 0:
             return
-        req = requests.get(url)
+        # req = requests.get(url)
         result = []
         # Check if successful
-        if req.status_code != 200:
+        response = urllib2.urlopen(url)
+        req = response.read()
+        if response.code != 200:
             return []
 
-        result += self.tonecode.findall(req.text)
+        result += self.tonecode.findall(req)
         return result
 
     def find(self):
@@ -88,8 +90,10 @@ class ToneProcess(object):
 
     def find(self):
         normal = Normalizer()
-        req = requests.get(self._url)
-        soup = BeautifulSoup(req.text, 'html.parser')
+        # req = requests.get(self._url)
+        response = urllib2.urlopen(self._url)
+        req = response.read()
+        soup = BeautifulSoup(req, 'html.parser')
         rows = soup.findAll('tr')
         lstvalue = []
         for row in rows:
