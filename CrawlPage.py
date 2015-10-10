@@ -6,11 +6,13 @@ import re
 
 maketrans = lambda A, B: dict((ord(a), b) for a, b in zip(A, B))
 punctuation_map = lambda A, B: dict((ord(char), B) for char in A)
+
+
 class Normalizer():
     def __init__(self):
         self.translations = maketrans(
-            u'١٢٣٤٥٦٧٨٩٠    ۱۲٣۴۵۶۷۸۹۰٤٥٦₀₁₂₃₄₅₆₇₈₉¹²⁰⁴⁵⁶⁷⁸⁹①②③④⑤⑥⑦⑧⑨⑴⑵⑶⑷⑸⑹⑺⑻⑼⒈⒉⒊⒋⒌⒍⒎⒏⒐٪؛،كيؤئإأآةك',
-            u'12345678904560123456789120456789123456789123456789123456789%;,کیویاااهک'
+            u'١٢٣٤٥٦٧٨٩٠٤٥٦',
+            u'1234567890456'
         )
         self.punctuations = punctuation_map(u"ـ\u200E\u200F" + unicode(string.punctuation), u" ")
         IGNORE_CHARS = u'\u0652\u064c\u064d\u064b\u064f\u0650\u064e\u0651\u0653\u0670\u0654\u0621'  # u' ْ ٌ ٍ ً ُ ِ َ ّ ٓ ٰ ٔ ء'
@@ -22,6 +24,7 @@ class Normalizer():
 
     def normalize_unique(self, text):
         return self.normalize(text).replace(" ", "").strip()
+
 
 class FindPage(object):
     def __init__(self):
@@ -47,6 +50,7 @@ class FindPage(object):
         for e in tests:
             stringcount = e
         return stringcount
+
 
 class CrawlPageByPNum(object):
     def __init__(self, PageNumber):
@@ -87,9 +91,13 @@ class ToneProcess(object):
         req = requests.get(self._url)
         soup = BeautifulSoup(req.text, 'html.parser')
         rows = soup.findAll('tr')
+        lstvalue = []
         for row in rows:
             cells = row.findChildren('td')
+            count = 1
             for cell in cells:
-                  value = cell.get_text(strip=True).encode('utf8').decode('utf8')
-                  # print ord(value[0]), ord(u'٣')
-                  print "The value in this cell is %s" % normal.normalize(value)
+                value = cell.get_text(strip=True).encode('utf8').decode('utf8')
+                if count == 2:
+                    lstvalue.append(normal.normalize(value))
+                count += 1
+        return lstvalue

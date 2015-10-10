@@ -2,13 +2,16 @@
   <dictionary name="mousavi">
     <words>
       <w>insertotrack</w>
+      <w>lstp</w>
       <w>maxlevel</w>
       <w>pageumber</w>
+      <w>proc</w>
       <w>strsql</w>
       <w>strtonecode</w>
       <w>toncode</w>
       <w>tonecode</w>
       <w>toneid</w>
+      <w>toneprice</w>
     </words>
   </dictionary>
 </component>
